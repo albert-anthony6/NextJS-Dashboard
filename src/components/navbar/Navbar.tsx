@@ -2,7 +2,7 @@ import styles from "./navbar.module.css";
 import Links from "./links/Links";
 import Link from "next/link";
 
-export default function Navbar() {
+export default function NavBar() {
   return (
     <nav className={styles.navbar}>
       <Link href="/" className={styles.logo}>
