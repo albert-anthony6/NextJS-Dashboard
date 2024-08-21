@@ -17,7 +17,7 @@ export default function Home() {
         </div>
         <div className={styles.brands}>
           <Image
-            src="brands.png"
+            src="/brands.png"
             alt="Brands."
             fill
             className={styles.brandImg}
@@ -26,7 +26,7 @@ export default function Home() {
       </div>
       <div className={styles.imageContainer}>
         <Image
-          src="hero.png"
+          src="/hero.gif"
           alt="Hero image."
           fill
           className={styles.heroImg}
