@@ -13,6 +13,21 @@ interface Post {
   createdAt: Date;
 }
 
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { slug: string };
+}) => {
+  const { slug } = params;
+
+  const post = await getPost(slug);
+
+  return {
+    title: post.title,
+    description: post.desc,
+  };
+};
+
 export default async function SinglePostPage({
   params,
 }: {

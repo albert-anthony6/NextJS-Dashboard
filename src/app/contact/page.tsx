@@ -1,5 +1,11 @@
+import { Metadata } from "next";
 import styles from "./contact.module.css";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Contact Page",
+  description: "Contact description",
+};
 
 export default function ContactPage() {
   return (
