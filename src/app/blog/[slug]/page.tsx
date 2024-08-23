@@ -2,15 +2,17 @@ import Image from "next/image";
 import styles from "./singlePost.module.css";
 import { Suspense } from "react";
 import { getPost } from "../../../../lib/data";
+import { Post } from "../../../../lib/types";
 import PostUser from "@/components/postUser/PostUser";
 
-interface Post {
-  title: string;
-  desc: string;
-  img: string;
-  userId: string;
-  slug: string;
-  createdAt: Date;
+async function getData(slug: string) {
+  const res = await fetch(`http://localhost:3000/api/blog/${slug}`);
+
+  if (!res.ok) {
+    throw new Error("Something went wrong");
+  }
+
+  return res.json();
 }
 
 export const generateMetadata = async ({
@@ -20,7 +22,7 @@ export const generateMetadata = async ({
 }) => {
   const { slug } = params;
 
-  const post = await getPost(slug);
+  const post = await getData(slug);
 
   return {
     title: post.title,
