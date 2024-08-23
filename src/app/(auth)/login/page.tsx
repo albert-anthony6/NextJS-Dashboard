@@ -1,3 +1,9 @@
+import { handleGithubLogin } from "../../../../lib/actions";
+
 export default function LoginPage() {
-  return <h1>Login</h1>;
+  return (
+    <form action={handleGithubLogin}>
+      <button>Login With Github</button>
+    </form>
+  );
 }

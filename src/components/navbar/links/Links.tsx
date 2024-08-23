@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Session } from "../../../../lib/types";
+import { handleLogout } from "../../../../lib/actions";
 import styles from "./links.module.css";
 import NavLink from "./navLink/NavLink";
 import Image from "next/image";
@@ -24,11 +26,10 @@ const links = [
   },
 ];
 
-export default function Luinks() {
+export default function Links({ session }: { session: Session | null }) {
   const [open, setOpen] = useState(false);
 
   // TODO: (TEMPORARY) Delete later
-  const session = true;
   const isAdmin = true;
 
   return (
@@ -39,10 +40,14 @@ export default function Luinks() {
             <NavLink item={link} />
           </li>
         ))}
-        {session ? (
+        {session?.user ? (
           <>
-            {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
-            <button className={styles.logout}>Logout</button>
+            {session.user.isAdmin && (
+              <NavLink item={{ title: "Admin", path: "/admin" }} />
+            )}
+            <form action={handleLogout}>
+              <button className={styles.logout}>Logout</button>
+            </form>
           </>
         ) : (
           <NavLink item={{ title: "Login", path: "/login" }} />
