@@ -1,8 +1,16 @@
 "use server";
+import bcrypt from "bcryptjs";
 import { signIn, signOut } from "./auth";
 import { User } from "./models";
 import { connectToDb } from "./utils";
-import bcrypt from "bcryptjs";
+
+type FormState = {
+  username: string;
+  email?: string;
+  password: string;
+  img?: string;
+  passwordConfirm?: string;
+};
 
 export async function handleGithubLogin() {
   await signIn("github");
@@ -12,13 +20,16 @@ export async function handleLogout() {
   await signOut();
 }
 
-export async function register(formData: FormData) {
+export async function register(
+  previousState: FormState | unknown,
+  formData: FormData
+) {
   console.log(formData);
   const { username, email, password, img, passwordConfirm } =
     Object.fromEntries(formData);
 
   if (password !== passwordConfirm) {
-    return "Passwords do not match.";
+    return { error: "Passwords do not match." };
   }
 
   try {
@@ -27,7 +38,7 @@ export async function register(formData: FormData) {
     const user = await User.findOne({ username });
 
     if (user !== null) {
-      return "Username already exists.";
+      return { error: "Username already exists." };
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -41,19 +52,29 @@ export async function register(formData: FormData) {
     });
 
     await newUser.save();
+
+    return { success: true };
   } catch (err) {
     console.log(err);
     return { error: "Something went wrong." };
   }
 }
 
-export async function login(formData: FormData) {
+export async function login(
+  previousState: FormState | unknown,
+  formData: FormData
+) {
   const { username, password } = Object.fromEntries(formData);
 
   try {
     await signIn("credentials", { username, password });
   } catch (err) {
     console.log(err);
-    return { error: "Something went wrong." };
+
+    if ((err as Error).message.includes("CredentialsSignin")) {
+      return { error: "Invalid username or password." };
+    }
+
+    throw err;
   }
 }

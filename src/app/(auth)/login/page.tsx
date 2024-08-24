@@ -1,16 +1,16 @@
-import { handleGithubLogin, login } from "../../../../lib/actions";
+import styles from "./login.module.css";
+import LoginForm from "@/components/loginForm/LoginForm";
+import { handleGithubLogin } from "../../../../lib/actions";
 
 export default function LoginPage() {
   return (
-    <main>
-      <form action={handleGithubLogin}>
-        <button>Login With Github</button>
-      </form>
-      <form action={login}>
-        <input type="text" name="username" placeholder="username" />
-        <input type="password" name="password" placeholder="password" />
-        <button>Login with credentials</button>
-      </form>
+    <main className={styles.loginPage}>
+      <div className={styles.wrapper}>
+        <form action={handleGithubLogin}>
+          <button className={styles.github}>Login With Github</button>
+        </form>
+        <LoginForm />
+      </div>
     </main>
   );
 }
