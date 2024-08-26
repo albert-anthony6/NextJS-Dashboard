@@ -29,9 +29,6 @@ const links = [
 export default function Links({ session }: { session: Session | null }) {
   const [open, setOpen] = useState(false);
 
-  // TODO: (TEMPORARY) Delete later
-  const isAdmin = true;
-
   return (
     <div className={styles.container}>
       <ul className={styles.links}>

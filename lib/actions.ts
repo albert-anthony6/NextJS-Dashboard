@@ -1,7 +1,8 @@
 "use server";
 import bcrypt from "bcryptjs";
+import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "./auth";
-import { User } from "./models";
+import { Post, User } from "./models";
 import { connectToDb } from "./utils";
 
 type FormState = {
@@ -12,6 +13,83 @@ type FormState = {
   passwordConfirm?: string;
 };
 
+export async function addPost(
+  _previousState: FormState | unknown,
+  formData: FormData
+) {
+  const { title, desc, slug, userId } = Object.fromEntries(formData);
+
+  try {
+    connectToDb();
+    const newPost = new Post({
+      title,
+      desc,
+      slug,
+      userId,
+    });
+
+    await newPost.save();
+    revalidatePath("/blog");
+    revalidatePath("/admin");
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong!" };
+  }
+}
+
+export async function deletePost(formData: FormData) {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDb();
+
+    await Post.findByIdAndDelete(id);
+    revalidatePath("/blog");
+    revalidatePath("/admin");
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong!" };
+  }
+}
+
+export async function addUser(
+  _previousState: FormState | unknown,
+  formData: FormData
+) {
+  const { username, email, password, img } = Object.fromEntries(formData);
+
+  try {
+    connectToDb();
+    const newUser = new User({
+      username,
+      email,
+      password,
+      img,
+    });
+
+    await newUser.save();
+    revalidatePath("/admin");
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong!" };
+  }
+}
+
+export async function deleteUser(formData: FormData) {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDb();
+
+    await Post.deleteMany({ userId: id });
+    await User.findByIdAndDelete(id);
+    revalidatePath("/admin");
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong!" };
+  }
+}
+
 export async function handleGithubLogin() {
   await signIn("github");
 }
@@ -21,10 +99,9 @@ export async function handleLogout() {
 }
 
 export async function register(
-  previousState: FormState | unknown,
+  _previousState: FormState | unknown,
   formData: FormData
 ) {
-  console.log(formData);
   const { username, email, password, img, passwordConfirm } =
     Object.fromEntries(formData);
 
@@ -61,7 +138,7 @@ export async function register(
 }
 
 export async function login(
-  previousState: FormState | unknown,
+  _previousState: FormState | unknown,
   formData: FormData
 ) {
   const { username, password } = Object.fromEntries(formData);

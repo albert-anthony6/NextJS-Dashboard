@@ -24,7 +24,7 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className={styles.imageContainer}>
+      <div className={styles.imgContainer}>
         <Image
           src="/hero.gif"
           alt="Hero image."

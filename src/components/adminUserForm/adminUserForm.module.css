@@ -1,0 +1,25 @@
+.adminUserForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.adminUserForm input,
+.adminUserForm textarea,
+.adminUserForm select {
+  padding: 20px;
+  background-color: var(--bgSoft);
+  border: none;
+  border-radius: 5px;
+  color: var(--textColor);
+}
+
+.adminUserForm button {
+  padding: 20px;
+  cursor: pointer;
+  background-color: var(--btn);
+  border: none;
+  border-radius: 5px;
+  color: var(--textColor);
+  font-weight: bold;
+}

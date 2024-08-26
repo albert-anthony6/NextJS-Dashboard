@@ -36,7 +36,7 @@ export const getUser = async (id: string) => {
   }
 };
 
-export const getAllUser = async () => {
+export const getAllUsers = async () => {
   try {
     connectToDb();
     const users = await User.find();
