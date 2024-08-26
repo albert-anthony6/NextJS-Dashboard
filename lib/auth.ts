@@ -2,8 +2,9 @@ import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { connectToDb } from "./utils";
 import { User } from "./models";
+import { connectToDb } from "./utils";
+import { authConfig } from "./auth.config";
 
 type Credentials = { username: string; password: string };
 
@@ -38,6 +39,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  ...authConfig,
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID,
@@ -80,5 +82,6 @@ export const {
 
       return true;
     },
+    ...authConfig.callbacks,
   },
 });
